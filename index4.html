@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - Website Trường học</title>
+    <style>
+        /* --- CÀI ĐẶT CHUNG --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* --- THANH ĐIỀU HƯỚNG (NAVBAR) --- */
+        .main-header {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 10px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo img {
+            height: 50px;
+            vertical-align: middle;
+        }
+
+        .main-nav ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+        
+        /* --- Dropdown Menu --- */
+        .main-nav li {
+            position: relative; /* Cần thiết cho menu con */
+        }
+
+        .main-nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 25px 0;
+            position: relative;
+            transition: color 0.3s;
+            cursor: pointer;
+            display: block;
+        }
+
+        .main-nav a:hover {
+            color: #c82333;
+        }
+
+        .main-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: #c82333;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .main-nav a:hover::after,
+        .main-nav li:hover > a::after, /* Giữ gạch chân khi hover vào menu con */
+        .main-nav a.active::after {
+            transform: scaleX(1);
+        }
+
+        .main-nav a.active {
+            color: #c82333;
+        }
+
+        /* Kiểu cho menu con */
+        .dropdown-menu {
+            display: none !important; /* Ẩn mặc định */
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 0 0 8px 8px;
+            padding: 10px 0;
+            min-width: 220px;
+            z-index: 1001;
+        }
+
+        .main-nav li:hover > .dropdown-menu {
+            display: block !important; /* Hiện khi hover vào li cha */
+        }
+        
+        .dropdown-menu li {
+            width: 100%;
+        }
+
+        .dropdown-menu a {
+            padding: 12px 20px;
+            font-size: 14px;
+            white-space: nowrap; /* Không xuống dòng */
+        }
+        
+        .dropdown-menu a::after {
+            display: none; /* Bỏ gạch chân cho menu con */
+        }
+
+        .btn-register {
+            background-color: #c82333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-register:hover {
+            background-color: #a71d2a;
+        }
+        
+        /* --- NỘI DUNG CHÍNH --- */
+        .main-content {
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+            display: none; /* Ẩn tất cả các trang ban đầu */
+        }
+
+        h1, h2 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* --- PHẦN TÀI LIỆU HỌC TẬP --- */
+        .breadcrumb { list-style: none; padding: 10px 15px; margin-bottom: 25px; background-color: #e9ecef; border-radius: 8px; font-size: 14px; }
+        .breadcrumb li { display: inline; }
+        .breadcrumb li+li:before { padding: 8px; color: #6c757d; content: "/\00a0"; }
+        .breadcrumb li a { color: #007bff; text-decoration: none; font-weight: 500; }
+        .breadcrumb li a:hover { text-decoration: underline; }
+        .breadcrumb li.active { color: #495057; font-weight: bold; }
+
+        .level-selection { display: flex; justify-content: center; flex-wrap: wrap; gap: 25px; }
+        .level-card { flex-basis: 30%; min-width: 280px; max-width: 320px; padding: 30px 20px; border-radius: 10px; text-align: center; color: #fff; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; border-bottom: 5px solid rgba(0,0,0,0.2); }
+        .level-card:hover { transform: translateY(-10px); box-shadow: 0 12px 24px rgba(0,0,0,0.2); }
+        .level-card .icon { font-size: 52px; margin-bottom: 15px; }
+        .level-card h3 { margin: 0; font-size: 24px; font-weight: 600; }
+        .level-card.tieu-hoc { background: linear-gradient(135deg, #28a745, #218838); }
+        .level-card.thcs { background: linear-gradient(135deg, #007bff, #0056b3); }
+        .level-card.thpt { background: linear-gradient(135deg, #6f42c1, #5a32a3); }
+        .level-card.giao-vien { background: linear-gradient(135deg, #ff9a00, #ff6a00); }
+        
+        .grade-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; text-align: center; }
+        .grade-card { padding: 30px 15px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; background-color: #f8f9fa; transition: all 0.3s ease; font-size: 20px; font-weight: bold; color: #0056b3; }
+        .grade-card:hover { transform: translateY(-5px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); background-color: #007bff; color: #fff; border-color: #0056b3; }
+
+        .subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; text-align: center; }
+        .subject-card { padding: 25px 15px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; background-color: #fff; transition: all 0.3s ease; }
+        .subject-card:hover { transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-color: #007bff; }
+        .subject-card .icon { font-size: 40px; margin-bottom: 10px; color: #0056b3; }
+        .subject-card span { font-weight: bold; font-size: 16px; color: #343a40; }
+
+        .document-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 20px; gap: 15px; }
+        .search-bar { flex-grow: 1; display: flex; min-width: 250px; }
+        .search-bar input { width: 100%; padding: 12px 15px; border: 1px solid #ccc; border-radius: 5px 0 0 5px; outline: none; transition: border-color 0.3s; }
+        .search-bar input:focus { border-color: #007bff; }
+        .search-bar button { padding: 12px 20px; border: none; background-color: #007bff; color: white; border-radius: 0 5px 5px 0; cursor: pointer; transition: background-color 0.3s; }
+        .search-bar button:hover { background-color: #0056b3; }
+        .filter-select { padding: 12px; border: 1px solid #ccc; border-radius: 5px; background-color: #fff; }
+
+        .document-table { width: 100%; border-collapse: collapse; margin-top: 20px; overflow-x: auto; }
+        .document-table th, .document-table td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        .document-table th { background-color: #f8f9fa; font-weight: 600; }
+        .document-table tbody tr:hover { background-color: #f1f1f1; }
+        .document-table .file-icon { margin-right: 10px; font-size: 20px; vertical-align: middle; }
+        .icon-pdf { color: #e74c3c; } .icon-doc { color: #3498db; } .icon-ppt { color: #e67e22; }
+        .action-buttons button { font-size: 14px; padding: 8px 14px; border: none; border-radius: 5px; color: white; cursor: pointer; margin-right: 5px; transition: opacity 0.3s; }
+        .action-buttons button:hover { opacity: 0.85; }
+        .btn-view { background-color: #28a745; } .btn-download { background-color: #17a2b8; }
+
+        /* --- PHẦN TIN TỨC --- */
+        .news-filter-bar { text-align: center; margin-bottom: 30px; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+        .news-filter-bar button { background-color: #e9ecef; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: 500; transition: background-color 0.3s, color 0.3s; }
+        .news-filter-bar button:hover, .news-filter-bar button.active { background-color: #c82333; color: #fff; }
+        
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .news-card { background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; cursor: pointer; }
+        .news-card:hover { transform: translateY(-5px); box-shadow: 0 8px 12px rgba(0,0,0,0.15); }
+        .news-card .news-image img { width: 100%; height: 200px; object-fit: cover; }
+        .news-card .news-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .news-card .news-category { display: inline-block; background-color: #ffc107; color: #333; padding: 3px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-bottom: 10px; align-self: flex-start; }
+        .news-card h3 { font-size: 18px; margin: 0 0 10px 0; color: #333; }
+        .news-card p { font-size: 14px; color: #666; flex-grow: 1; margin-bottom: 15px; }
+        .news-card .read-more { text-decoration: none; color: #c82333; font-weight: bold; font-size: 14px; }
+        .pagination { text-align: center; margin-top: 40px; }
+        .pagination button { background-color: #c82333; color: #fff; border: none; padding: 12px 30px; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s; }
+        .pagination button:hover { background-color: #a71d2a; }
+
+        /* --- PHẦN CHI TIẾT BÀI VIẾT (BLOG POST) --- */
+        #page-news-detail .post-container { max-width: 800px; margin: 0 auto; }
+        .post-header h1 { font-size: 36px; color: #212529; text-align: left; margin-bottom: 15px; }
+        .post-meta { display: flex; align-items: center; gap: 15px; color: #6c757d; font-size: 14px; margin-bottom: 25px; }
+        .post-meta .category { background-color: #ffc107; color: #333; padding: 3px 10px; border-radius: 4px; font-weight: bold; }
+        .post-image { margin-bottom: 30px; }
+        .post-image img { width: 100%; border-radius: 8px; }
+        .post-content { font-size: 16px; line-height: 1.8; }
+        .post-content p { margin-bottom: 1.5em; }
+        .post-content h3 { font-size: 24px; margin-top: 2em; margin-bottom: 1em; }
+        .back-to-news { display: inline-block; margin-top: 40px; padding: 10px 20px; background-color: #6c757d; color: #fff; text-decoration: none; border-radius: 5px; transition: background-color 0.3s; }
+        .back-to-news:hover { background-color: #5a6268; }
+
+        /* --- PHẦN THÀNH TÍCH HỌC TẬP --- */
+        .results-hero {
+            padding: 60px 20px;
+            background: linear-gradient(rgba(0, 86, 179, 0.7), rgba(0, 86, 179, 0.7)), url('https://placehold.co/1200x400/0056b3/FFFFFF?text=Thành+Tích+Học+Tập') no-repeat center center;
+            background-size: cover;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        .results-hero h1 {
+            color: #fff;
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .highlight-card {
+            background-color: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            border-left: 5px solid #007bff;
+        }
+        .highlight-card .number {
+            font-size: 48px;
+            font-weight: bold;
+            color: #c82333;
+            margin-bottom: 10px;
+        }
+        .highlight-card .description {
+            font-size: 16px;
+            color: #333;
+        }
+        .accordion-section h3 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .accordion-item {
+            background-color: #fff;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .accordion-header {
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .accordion-header::after {
+            content: '+';
+            font-size: 24px;
+            transition: transform 0.3s;
+        }
+        .accordion-item.active .accordion-header::after {
+            transform: rotate(45deg);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            padding: 0 20px;
+        }
+        .accordion-content-inner {
+            padding: 20px 0;
+        }
+        .accordion-item.active .accordion-content {
+             max-height: 500px; /* Adjust as needed */
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <a href="#" class="logo" onclick="hideAllPages(); return false;"><img src="./logo.png"></a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a id="nav-trangchu" href="#" onclick="hideAllPages(); return false;">TRANG CHỦ</a></li>
+                    <li><a id="nav-gioithieu" href="#" onclick="hideAllPages(); return false;">GIỚI THIỆU</a></li>
+                    <li><a id="nav-chuongtrinh" href="#" onclick="hideAllPages(); return false;">CHƯƠNG TRÌNH HỌC</a></li>
+                    <li><a id="nav-doisong" href="#" onclick="hideAllPages(); return false;">ĐỜI SỐNG HỌC ĐƯỜNG</a></li>
+                    <li>
+                        <a id="nav-portal">CỔNG THÔNG TIN</a>
+                        <ul class="dropdown-menu">
+                            <li><a id="nav-results" onclick="showPage('page-academic-results'); return false;">Thành tích học tập</a></li>
+                            <li><a id="nav-tintuc" onclick="showPage('page-news'); return false;">Tin tức & Sự kiện</a></li>
+                            <li><a id="nav-tailieu" onclick="showPage('page-level-selection'); return false;">Tài liệu học tập</a></li>
+                        </ul>
+                    </li>
+                    <li><a id="nav-tuyensinh" href="#" onclick="hideAllPages(); return false;">TUYỂN SINH & TUYỂN DỤNG</a></li>
+                </ul>
+            </nav>
+            <a href="#" class="btn-register">ĐĂNG KÝ TƯ VẤN</a>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <!-- TRANG 1: CHỌN CẤP HỌC & GIÁO VIÊN -->
+        <div class="container" id="page-level-selection">
+            <h1>📚 Tài Liệu Học Tập 📚</h1>
+            <div class="level-selection">
+                <div class="level-card tieu-hoc" onclick="showPage('page-grade-selection', 'Tiểu học')"><div class="icon">🎨</div><h3>Tiểu Học</h3></div>
+                <div class="level-card thcs" onclick="showPage('page-subject-selection', 'Trung học cơ sở', 'Khối 7')"><div class="icon">🔬</div><h3>Trung Học Cơ Sở</h3></div>
+                <div class="level-card thpt" onclick="showPage('page-subject-selection', 'Trung học phổ thông', 'Khối 11')"><div class="icon">🎓</div><h3>Trung Học Phổ Thông</h3></div>
+                <div class="level-card giao-vien" onclick="showPage('page-teacher-documents')"><div class="icon">👩‍🏫</div><h3>Tài liệu Giáo viên</h3></div>
+            </div>
+        </div>
+
+        <!-- TRANG 1.5: CHỌN KHỐI LỚP (TIỂU HỌC) -->
+        <div class="container" id="page-grade-selection">
+            <nav aria-label="breadcrumb"><ol class="breadcrumb" id="breadcrumb-grade"></ol></nav>
+            <h2 id="grade-title">Chọn Khối Lớp</h2>
+            <div class="grade-grid">
+                <div class="grade-card" onclick="showPage('page-subject-selection', currentState.level, 'Lớp 1')"><span>Lớp 1</span></div>
+                <div class="grade-card" onclick="showPage('page-subject-selection', currentState.level, 'Lớp 2')"><span>Lớp 2</span></div>
+                <div class="grade-card" onclick="showPage('page-subject-selection', currentState.level, 'Lớp 3')"><span>Lớp 3</span></div>
+                <div class="grade-card" onclick="showPage('page-subject-selection', currentState.level, 'Lớp 4')"><span>Lớp 4</span></div>
+                <div class="grade-card" onclick="showPage('page-subject-selection', currentState.level, 'Lớp 5')"><span>Lớp 5</span></div>
+            </div>
+        </div>
+
+        <!-- TRANG 2: CHỌN MÔN HỌC -->
+        <div class="container" id="page-subject-selection">
+            <nav aria-label="breadcrumb"><ol class="breadcrumb" id="breadcrumb-subject"></ol></nav>
+            <h2 id="subject-title">Chọn Môn Học</h2>
+            <div class="subject-grid">
+                <div class="subject-card" onclick="showPage('page-document-list', 'Toán Học')"><div class="icon">🧮</div><span>Toán Học</span></div>
+                <div class="subject-card" onclick="showPage('page-document-list', 'Ngữ Văn')"><div class="icon">📖</div><span>Ngữ Văn / Tiếng Việt</span></div>
+                <div class="subject-card" onclick="showPage('page-document-list', 'Tiếng Anh')"><div class="icon">🇬🇧</div><span>Tiếng Anh</span></div>
+                <div class="subject-card" onclick="showPage('page-document-list', 'Khoa học tự nhiên')"><div class="icon">🔭</div><span>KHTN / Tự nhiên & Xã hội</span></div>
+                <div class="subject-card" onclick="showPage('page-document-list', 'Lịch sử & Địa lý')"><div class="icon">🌏</div><span>Lịch sử & Địa lý</span></div>
+                <div class="subject-card" onclick="showPage('page-document-list', 'Giáo dục thể chất')"><div class="icon">🏃</div><span>GDTC</span></div>
+            </div>
+        </div>
+        
+        <!-- TRANG 3: DANH SÁCH TÀI LIỆU -->
+        <div class="container" id="page-document-list">
+            <nav aria-label="breadcrumb"><ol class="breadcrumb" id="breadcrumb-document"></ol></nav>
+            <h2 id="document-title">Danh sách tài liệu</h2>
+            <div class="document-header">
+                <div class="search-bar"><input type="text" placeholder="Tìm kiếm tài liệu..."><button>🔍</button></div>
+                <select class="filter-select"><option value="">Lọc theo loại</option><option value="de-cuong">Đề cương</option><option value="bai-giang">Bài giảng</option><option value="bai-tap">Bài tập</option><option value="de-thi">Đề thi</option></select>
+            </div>
+            <table class="document-table">
+                <thead><tr><th>Tên tài liệu</th><th>Loại</th><th>Ngày đăng</th><th style="width: 150px;">Hành động</th></tr></thead>
+                <tbody>
+                    <tr><td><span class="file-icon icon-pdf">📄</span>Đề cương ôn tập Học kỳ I</td><td>Đề cương</td><td>01/08/2025</td><td class="action-buttons"><button class="btn-view">Xem</button><button class="btn-download">Tải về</button></td></tr>
+                    <tr><td><span class="file-icon icon-ppt">🖥️</span>Bài giảng Chương 1: Số hữu tỉ</td><td>Bài giảng</td><td>28/07/2025</td><td class="action-buttons"><button class="btn-view">Xem</button><button class="btn-download">Tải về</button></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- TRANG 4: TÀI LIỆU GIÁO VIÊN -->
+        <div class="container" id="page-teacher-documents">
+            <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="#" onclick="showPage('page-level-selection'); return false;">Tài liệu học tập</a></li><li class="breadcrumb-item active" aria-current="page">Tài liệu cho Giáo viên</li></ol></nav>
+            <h2>Tài liệu dành cho Giáo viên</h2>
+            <p style="text-align:center; font-size: 18px; color: #555;">Nơi đây sẽ chứa các tài liệu chuyên môn, giáo án, và tài nguyên dành riêng cho giáo viên.</p>
+        </div>
+
+        <!-- TRANG 5: TIN TỨC -->
+        <div class="container" id="page-news">
+            <h2>Tin tức & Sự kiện</h2>
+            <div class="news-filter-bar">
+                <button class="active">Tất cả</button>
+                <button>Hoạt động & Sự kiện</button>
+                <button>Thành tích học sinh</button>
+                <button>Thông báo</button>
+            </div>
+            <div class="news-grid">
+                <div class="news-card" onclick="showPage('page-news-detail')">
+                    <div class="news-image"><img src="https://placehold.co/600x400/E6F4EA/333?text=Sự+Kiện" alt="Tin tức 1"></div>
+                    <div class="news-content">
+                        <span class="news-category">Hoạt động & Sự kiện</span>
+                        <h3>Ngày hội STEM sáng tạo và bổ ích dành cho học sinh</h3>
+                        <p>Học sinh các cấp đã có một ngày hội khoa học công nghệ đầy hứng khởi với nhiều dự án sáng tạo, thể hiện tài năng và kiến thức.</p>
+                        <span class="read-more">Đọc thêm →</span>
+                    </div>
+                </div>
+                <div class="news-card" onclick="showPage('page-news-detail')">
+                    <div class="news-image"><img src="https://placehold.co/600x400/D6EAF8/333?text=Thành+Tích" alt="Tin tức 2"></div>
+                    <div class="news-content">
+                        <span class="news-category">Thành tích học sinh</span>
+                        <h3>Học sinh Trương Vĩnh Ký đạt giải cao trong kỳ thi Olympic Toán quốc tế</h3>
+                        <p>Em Nguyễn Văn An, học sinh lớp 11A1, đã xuất sắc mang về Huy chương Bạc trong kỳ thi Olympic Toán học quốc tế (IMO) 2025.</p>
+                        <span class="read-more">Đọc thêm →</span>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination"><button>Xem thêm tin tức</button></div>
+        </div>
+
+        <!-- TRANG 6: CHI TIẾT BÀI VIẾT -->
+        <div class="container" id="page-news-detail">
+            <div class="post-container">
+                <div class="post-header">
+                    <h1>Ngày hội STEM sáng tạo và bổ ích dành cho học sinh</h1>
+                    <div class="post-meta">
+                        <span class="category">Hoạt động & Sự kiện</span>
+                        <span>•</span>
+                        <span>Đăng bởi: Admin</span>
+                        <span>•</span>
+                        <span>Ngày 11 tháng 8, 2025</span>
+                    </div>
+                </div>
+                <div class="post-image"><img src="https://placehold.co/800x500/E6F4EA/333?text=Ngày+hội+STEM" alt="Ngày hội STEM"></div>
+                <div class="post-content">
+                    <p><strong>Vừa qua, trường Trương Vĩnh Ký đã tổ chức thành công "Ngày hội STEM 2025"...</strong></p>
+                    <a href="#" class="back-to-news" onclick="showPage('page-news'); return false;">← Quay lại trang Tin tức</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRANG 7: THÀNH TÍCH HỌC TẬP -->
+        <div class="container" id="page-academic-results">
+            <div class="results-hero">
+                <h1>Thành Tích Học Tập</h1>
+                <p>Tự hào về những thành tựu xuất sắc của học sinh Trương Vĩnh Ký</p>
+            </div>
+            <div class="highlights-grid">
+                <div class="highlight-card">
+                    <div class="number">98%</div>
+                    <div class="description">Học sinh tốt nghiệp THPT</div>
+                </div>
+                <div class="highlight-card">
+                    <div class="number">85%</div>
+                    <div class="description">Học sinh đỗ vào các trường Đại học Top đầu</div>
+                </div>
+                <div class="highlight-card">
+                    <div class="number">50+</div>
+                    <div class="description">Giải thưởng cấp Quốc gia & Quốc tế</div>
+                </div>
+            </div>
+            <div class="accordion-section">
+                <h3>Kết quả chi tiết theo năm</h3>
+                <div class="accordion-item">
+                    <div class="accordion-header">Năm học 2024 - 2025</div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <p><strong>Điểm thi THPT Quốc Gia:</strong> Điểm trung bình các môn đạt 8.5, trong đó có 2 thủ khoa toàn quốc.</p>
+                            <p><strong>Giải thưởng:</strong> 1 Huy chương Bạc Olympic Toán quốc tế, 5 giải Nhất học sinh giỏi cấp Quốc gia.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">Năm học 2023 - 2024</div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <p><strong>Điểm thi THPT Quốc Gia:</strong> Điểm trung bình các môn đạt 8.2.</p>
+                            <p><strong>Giải thưởng:</strong> 3 giải Nhất, 10 giải Nhì học sinh giỏi cấp Quốc gia.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT ĐỂ CHUYỂN TRANG VÀ CẬP NHẬT BREADCRUMB -->
+    <script>
+        let currentState = { level: '', grade: '', subject: '' };
+        const pages = document.querySelectorAll('.container');
+        const navLinks = document.querySelectorAll('.main-nav a');
+        const navPortal = document.getElementById('nav-portal');
+
+        function setActiveNav(activeId) {
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                const parentLi = link.closest('li');
+                if (parentLi) {
+                    parentLi.querySelector('a').classList.remove('active');
+                }
+            });
+
+            const activeLink = document.getElementById(activeId);
+            if (activeLink) {
+                 const parentLi = activeLink.closest('li');
+                 if (parentLi.parentElement.classList.contains('dropdown-menu')) {
+                    // Nếu là menu con, active cả mục cha
+                    navPortal.classList.add('active');
+                 } else {
+                    activeLink.classList.add('active');
+                 }
+            }
+        }
+
+        function hideAllPages() {
+            pages.forEach(page => page.style.display = 'none');
+            setActiveNav('nav-trangchu');
+        }
+
+        function showPage(pageId, ...args) {
+            pages.forEach(page => page.style.display = 'none');
+
+            if (pageId.startsWith('page-news')) {
+                setActiveNav('nav-tintuc');
+            } else if (['page-level-selection', 'page-grade-selection', 'page-subject-selection', 'page-document-list', 'page-teacher-documents'].includes(pageId)) {
+                setActiveNav('nav-tailieu');
+            } else if (pageId === 'page-academic-results') {
+                setActiveNav('nav-results');
+            } else {
+                setActiveNav(null);
+            }
+
+            if (pageId === 'page-level-selection') {
+                currentState = { level: '', grade: '', subject: '' };
+            } else if (pageId === 'page-grade-selection') {
+                currentState.level = args[0];
+                updateBreadcrumbGrade();
+            } else if (pageId === 'page-subject-selection') {
+                currentState.level = args[0];
+                currentState.grade = args[1];
+                updateBreadcrumbSubject();
+            } else if (pageId === 'page-document-list') {
+                currentState.subject = args[0];
+                updateBreadcrumbDocument();
+            }
+
+            const pageToShow = document.getElementById(pageId);
+            if (pageToShow) {
+                pageToShow.style.display = 'block';
+            }
+        }
+
+        function updateBreadcrumbGrade() {
+            const breadcrumb = document.getElementById('breadcrumb-grade');
+            document.getElementById('grade-title').innerText = `Chọn Khối Lớp - ${currentState.level}`;
+            breadcrumb.innerHTML = `<li class="breadcrumb-item"><a href="#" onclick="showPage('page-level-selection'); return false;">Tài liệu học tập</a></li><li class="breadcrumb-item active" aria-current="page">${currentState.level}</li>`;
+        }
+
+        function updateBreadcrumbSubject() {
+            const breadcrumb = document.getElementById('breadcrumb-subject');
+            document.getElementById('subject-title').innerText = `Chọn Môn Học - ${currentState.grade}`;
+            let levelLink = `<li class="breadcrumb-item"><a href="#" onclick="showPage('page-grade-selection', '${currentState.level}'); return false;">${currentState.level}</a></li>`;
+            if (currentState.level !== 'Tiểu học') { levelLink = ''; }
+            breadcrumb.innerHTML = `<li class="breadcrumb-item"><a href="#" onclick="showPage('page-level-selection'); return false;">Tài liệu học tập</a></li>${levelLink}<li class="breadcrumb-item active" aria-current="page">${currentState.level === 'Tiểu học' ? currentState.grade : `${currentState.level} > ${currentState.grade}`}</li>`;
+        }
+        
+        function updateBreadcrumbDocument() {
+            const breadcrumb = document.getElementById('breadcrumb-document');
+            document.getElementById('document-title').innerText = `Danh sách tài liệu - Môn ${currentState.subject}`;
+            let levelLink = `<li class="breadcrumb-item"><a href="#" onclick="showPage('page-grade-selection', '${currentState.level}'); return false;">${currentState.level}</a></li>`;
+            if (currentState.level !== 'Tiểu học') { levelLink = ''; }
+            breadcrumb.innerHTML = `<li class="breadcrumb-item"><a href="#" onclick="showPage('page-level-selection'); return false;">Tài liệu học tập</a></li>${levelLink}<li class="breadcrumb-item"><a href="#" onclick="showPage('page-subject-selection', '${currentState.level}', '${currentState.grade}'); return false;">${currentState.level === 'Tiểu học' ? currentState.grade : `${currentState.level} > ${currentState.grade}`}</a></li><li class="breadcrumb-item active" aria-current="page">${currentState.subject}</li>`;
+        }
+        
+        const filterButtons = document.querySelectorAll('.news-filter-bar button');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+
+        const accordionItems = document.querySelectorAll('.accordion-item');
+        accordionItems.forEach(item => {
+            const header = item.querySelector('.accordion-header');
+            header.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                accordionItems.forEach(i => i.classList.remove('active'));
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
