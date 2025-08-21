@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Kế hoạch Lập trình Tin học</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --secondary-color: #6c757d;
+            --light-gray: #f8f9fa;
+            --dark-text: #343a40;
+            --border-color: #dee2e6;
+            --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-text);
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: white;
+            padding: 15px 40px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: left;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 70px);
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .content-wrapper {
+            width: 100%;
+            max-width: 900px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 40px 50px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        h1 {
+            color: var(--dark-text);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 25px;
+        }
+
+        p {
+            line-height: 1.7;
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .card {
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow);
+            border-color: var(--primary-color);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            color: #777;
+            margin-bottom: 0;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 30px;
+            font-size: 16px;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        #demo-content {
+            text-align: left;
+            margin-top: 20px;
+            background-color: var(--light-gray);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        #demo-embed {
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        #demo-embed iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+
+        strong {
+            color: var(--dark-text);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header" style="display: flex; justify-content: flex-start; gap: 10px">
+        <div>
+            <img src="./logo.png" style="width: 50px; height: 50px;">
+        </div>
+        <div>
+            <h2 style="color: black"> Trường TH - THCS - THPT Trương Vĩnh Ký
+            </h2>
+        </div>
+        <!-- Thầy/Cô có thể thay thế chữ bằng thẻ <img> logo ở đây -->
+
+    </div>
+
+    <div class="main-container">
+        <div class="content-wrapper">
+            <!-- Màn hình 1: Chào mừng -->
+            <div id="welcome-screen" class="screen active">
+                <h1>Kế hoạch Dạy học Tương tác</h1>
+                <h2>Môn Tin học - Sách Kết nối tri thức</h2>
+                <p>Nền tảng vận dụng các bài tập lập trình trực quan (Scratch & Python) vào từng chủ đề, giúp học sinh
+                    củng cố kiến thức và khơi dậy niềm đam mê sáng tạo.</p>
+                <button class="btn" onclick="showScreen('grade-selection')">Khám phá ngay</button>
+            </div>
+
+            <!-- Màn hình 2: Chọn khối lớp -->
+            <div id="grade-selection" class="screen">
+                <h1>Chọn khối lớp</h1>
+                <p>Mỗi khối lớp sẽ có các bài tập vận dụng phù hợp với chương trình học.</p>
+                <div id="grade-list" class="card-grid">
+                    <!-- JS generated cards -->
+                </div>
+            </div>
+
+            <!-- Màn hình 3: Chọn chủ đề -->
+            <div id="topic-selection" class="screen">
+                <h1 id="topic-title">Chọn chủ đề</h1>
+                <p id="topic-subtitle"></p>
+                <div id="topic-list" class="card-grid">
+                    <!-- JS generated cards -->
+                </div>
+                <button class="back-btn" onclick="showScreen('grade-selection')">‹ Quay lại chọn khối</button>
+            </div>
+
+            <!-- Màn hình 4: Demo sản phẩm -->
+            <div id="demo-screen" class="screen">
+                <h1 id="demo-title"></h1>
+                <div id="demo-content">
+                    <p><strong>📝 Mô tả bài tập/sản phẩm:</strong></p>
+                    <p id="demo-description"></p>
+                    <p><strong>🎯 Mục tiêu & Đánh giá:</strong></p>
+                    <p id="demo-goal"></p>
+                    <div id="demo-embed">
+                        <!-- JS generated embed -->
+                    </div>
+                </div>
+                <button id="back-to-topics" class="back-btn">‹ Quay lại chọn chủ đề</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const curriculumData = {
+            6: {
+                platform: 'Scratch',
+                topics: [
+                    { title: 'Chủ đề 1: Máy tính và cộng đồng', description: 'Xem sản phẩm Scratch mô tả câu chuyện tương tác để hiểu về Input (nhập tên) - Process (kịch bản chạy) - Output (nhân vật chào).', goal: 'Giúp HS hình dung quy trình xử lý thông tin một cách trực quan.', embedCode: '<iframe src="https://scratch.mit.edu/projects/1208074592/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>' },
+                    { title: 'Chủ đề 2: Mạng máy tính và Internet', description: 'Xem sản phẩm mô phỏng 2 máy tính gửi tin nhắn cho nhau. Giúp HS hình dung cách thông tin được truyền đi trong mạng.', goal: 'Trực quan hóa khái niệm trừu tượng về việc truyền tin trong mạng.', embedCode: '<iframe src="https://scratch.mit.edu/projects/15629437/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>' },
+                    { title: 'Chủ đề 3: Tổ chức lưu trữ', description: 'Bài tập yêu cầu HS tạo một dự án có nhiều nhân vật và phông nền, sau đó đặt tên các đối tượng một cách khoa học để dễ tìm kiếm.', goal: 'Rèn luyện tư duy tổ chức logic ngay trên các đối tượng lập trình.', embedCode: '<iframe src="https://scratch.mit.edu/projects/editor/" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>' },
+                    { title: 'Chủ đề 4: Đạo đức, pháp luật', description: 'Xem một câu chuyện tương tác trên Scratch về các tình huống trên mạng (VD: người lạ hỏi thông tin cá nhân). HS sẽ chọn cách ứng xử.', goal: 'Giáo dục về an toàn mạng thông qua tình huống nhập vai, dễ hiểu.', embedCode: '<iframe src="https://scratch.mit.edu/projects/215925953/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>' },
+                    { title: 'Chủ đề 5: Ứng dụng tin học', description: 'Yêu cầu HS dùng các nhân vật trong Scratch để sắp xếp thành một sơ đồ tư duy đơn giản về chủ đề "Gia đình".', goal: 'Vận dụng không gian sân khấu của Scratch để biểu diễn thông tin một cách trực quan.', embedCode: '<iframe src="https://scratch.mit.edu/projects/editor/" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>' },
+                    { title: 'Chủ đề 6: Giải quyết vấn đề', description: 'Bài tập yêu cầu HS lập trình cho nhân vật Mèo vẽ một hình vuông bằng cách lặp lại việc đi thẳng và xoay 90 độ.', goal: 'Gắn kết trực tiếp lý thuyết thuật toán với các khối lệnh lập trình.', embedCode: '<iframe src="https://scratch.mit.edu/projects/11956228/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>' }
+                ]
+            },
+            7: {
+                platform: 'Scratch',
+                topics: [
+                    { title: 'Chủ đề 1: Máy tính và cộng đồng', description: 'Xem dự án Scratch sử dụng các sự kiện như "khi bấm vào nhân vật" (thiết bị vào: chuột), nhân vật sẽ phát âm thanh (thiết bị ra: loa).', goal: 'Củng cố kiến thức về phần cứng và phần mềm thông qua các khối lệnh sự kiện.', embedCode: '<iframe src="https://scratch.mit.edu/projects/337446553/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>' },
+                    { title: 'Chủ đề 2: Mạng xã hội', description: 'HS tạo dự án mô phỏng nút "Like". Khi người dùng bấm vào nhân vật nút Like, giá trị của biến "số lượt thích" sẽ tăng lên 1.', goal: 'Giúp HS hiểu cơ chế hoạt động cơ bản của các tính năng tương tác trên mạng xã hội.', embedCode: '<iframe src="https://scratch.mit.edu/projects/27533863/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>' },
+                    { title: 'Chủ đề 3: Ứng xử trên mạng', description: 'Xem một hoạt cảnh trên Scratch về hai nhân vật đang tranh luận. Một nhân vật dùng lời lẽ tiêu cực, nhân vật kia dùng lời lẽ tích cực.', goal: 'Tạo tình huống trực quan để giáo dục về văn hóa ứng xử số.', embedCode: '<iframe src="https://scratch.mit.edu/projects/416667958/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>' },
+                    { title: 'Chủ đề 4: Ứng dụng tin học', description: 'Yêu cầu HS tạo dự án "Máy tính bỏ túi" đơn giản bằng cách sử dụng các biến và khối lệnh phép toán trong Scratch.', goal: 'Mô phỏng lại chức năng của các phần mềm ứng dụng quen thuộc bằng lập trình.', embedCode: '<iframe src="https://scratch.mit.edu/projects/10943931/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>' },
+                    { title: 'Chủ đề 5: Giải quyết vấn đề', description: 'Tạo một danh sách (List) trong Scratch chứa các số. Yêu cầu HS lập trình cho nhân vật kiểm tra lần lượt từng phần tử để tìm một số cho trước.', goal: 'Hiện thực hóa thuật toán tìm kiếm tuần tự, giúp HS thấy rõ từng bước chạy của thuật toán.', embedCode: '<iframe src="https://scratch.mit.edu/projects/41255864/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>' }
+                ]
+            },
+            8: {
+                platform: 'Python',
+                topics: [
+                    { title: 'Chủ đề 1: Lược sử công cụ tính toán', description: 'Xem một đoạn code Python kể câu chuyện về các thành tựu khoa học từ 1975-2025, cho thấy vai trò của máy tính không chỉ là tính toán mà còn là lưu trữ tri thức.', goal: 'Tạo sự kết nối giữa lịch sử và ứng dụng lập trình hiện đại, khơi gợi cảm hứng cho học sinh.', embedCode: '<iframe frameborder="0" width="100%" height="500px" src="https://www.online-python.com/CN1kDM4FSU"></iframe>' },
+                    { title: 'Chủ đề 2: Thông tin trong môi trường số', description: 'Xem một đoạn code Python đọc nội dung từ một file .txt và in ra màn hình. HS sẽ biết cách chương trình tương tác với dữ liệu.', goal: 'Giúp HS hiểu rằng lập trình có thể tự động hóa việc xử lý thông tin từ các tệp.', embedCode: '<iframe frameborder="0" width="100%" height="500px" src="https://www.online-python.com/8A6QZOHdKg"></iframe>' },
+                    { title: 'Chủ đề 3: Đạo đức và văn hóa', description: 'Trình bày một đoạn code Python đơn giản kiểm tra mật khẩu. Từ đó thảo luận về tầm quan trọng của việc đặt mật khẩu mạnh.', goal: 'Dùng code để minh họa cho một khái niệm an toàn thông tin cơ bản.', embedCode: '<iframe frameborder="0" width="100%" height="500px" src="https://www.online-python.com/qE7hW1bIaT"></iframe>' },
+                    { title: 'Chủ đề 4: Ứng dụng tin học', description: 'Cung cấp cho HS một danh sách (list) các số. Yêu cầu HS viết lệnh để sắp xếp danh sách và lọc ra các số lớn hơn một giá trị cho trước.', goal: 'Cho thấy các chức năng của bảng tính thực chất là các thuật toán có thể được lập trình.', embedCode: '<iframe frameborder="0" width="100%" height="500px" src="https://www.online-python.com/CN1kDM4FSU"></iframe>' },
+                    { title: 'Chủ đề 5: Từ thuật toán đến chương trình', description: 'Cho thuật toán tìm số lớn nhất bằng ngôn ngữ tự nhiên. Yêu cầu HS chuyển thể thuật toán đó thành một chương trình Python hoàn chỉnh.', goal: 'Rèn luyện kỹ năng chuyển đổi từ tư duy thuật toán sang mã lệnh.', embedCode: '<iframe frameborder="0" width="100%" height="500px" src="https://www.online-python.com/CN1kDM4FSU"></iframe>' },
+                    { title: 'Chủ đề 6: Hướng nghiệp', description: 'Giới thiệu thư viện turtle trong Python và cho HS xem một đoạn code ngắn vẽ ra các hình học nhiều màu sắc.', goal: 'Khơi gợi sự hứng thú và cho thấy ứng dụng của lập trình trong lĩnh vực sáng tạo.', embedCode: '<iframe frameborder="0" width="100%" height="500px" src="https://www.online-python.com/CN1kDM4FSU"></iframe>' }
+                ]
+            },
+            9: {
+                platform: 'Python',
+                topics: [
+                    { title: 'Chủ đề 1: Thế giới kĩ thuật số', description: 'Xem một đoạn code Python sử dụng API đơn giản (ví dụ: lấy thông tin thời tiết trực tuyến) và giải thích cách các chương trình "nói chuyện" với nhau.', goal: 'Mở rộng tầm nhìn của HS về các ứng dụng kết nối của lập trình.', embedCode: '<iframe frameborder="0" width="100%" height="500px" src="https://www.online-python.com/CN1kDM4FSU"></iframe>' },
+                    { title: 'Chủ đề 2: Giải quyết vấn đề', description: 'Cho một danh sách (list) chứa điểm thi của một lớp. Yêu cầu HS viết chương trình Python để tính điểm trung bình, tìm điểm cao nhất, thấp nhất.', goal: 'Rèn luyện kỹ năng dùng lập trình để xử lý, trích xuất thông tin hữu ích từ dữ liệu thô.', embedCode: '<iframe frameborder="0" width="100%" height="500px" src="https://www.online-python.com/CN1kDM4FSU"></iframe>' },
+                    { title: 'Chủ đề 3: Vấn đề pháp lí', description: 'Xem một chương trình Python có ghi rõ tên tác giả, phiên bản ở đầu file. Thảo luận về tầm quan trọng của việc tuân thủ bản quyền.', goal: 'Giáo dục về "văn hóa lập trình" và tôn trọng sở hữu trí tuệ.', embedCode: '<iframe frameborder="0" width="100%" height="500px" src="https://www.online-python.com/CN1kDM4FSU"></iframe>' },
+                    { title: 'Chủ đề 4: Ứng dụng tin học', description: 'Cho một danh sách dữ liệu. Yêu cầu HS viết code Python dùng vòng lặp và if để đếm và tính tổng các giá trị thỏa mãn điều kiện (tương tự COUNTIF, SUMIF).', goal: 'Chứng minh rằng các hàm phức tạp trong bảng tính có thể được tái tạo bằng lập trình.', embedCode: '<iframe frameborder="0" width="100%" height="500px" src="https://www.online-python.com/CN1kDM4FSU"></iframe>' },
+                    { title: 'Chủ đề 5: Lập trình trực quan', description: 'Giới thiệu thư viện Tkinter và trình diễn một chương trình Python tạo ra một cửa sổ đơn giản có một nút bấm.', goal: 'Là bước đệm để HS hiểu về cách các ứng dụng có giao diện đồ họa hoạt động.', embedCode: '<iframe frameborder="0" width="100%" height="500px" src="https://www.online-python.com/CN1kDM4FSU"></iframe>' }
+                ]
+            }
+        };
+
+        let currentGrade = 0;
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function createGradeCards() {
+            const gradeListDiv = document.getElementById('grade-list');
+            gradeListDiv.innerHTML = '';
+            [6, 7, 8, 9].forEach(grade => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => showTopics(grade);
+                card.innerHTML = `
+                    <h3>Khối ${grade}</h3>
+                    <p>Nền tảng: ${curriculumData[grade].platform}</p>
+                `;
+                gradeListDiv.appendChild(card);
+            });
+        }
+
+        function showTopics(grade) {
+            currentGrade = grade;
+            const topicData = curriculumData[grade];
+            const topicListDiv = document.getElementById('topic-list');
+
+            document.getElementById('topic-title').innerText = `Khối ${grade}`;
+            document.getElementById('topic-subtitle').innerText = `Các chủ đề vận dụng ${topicData.platform}`;
+            topicListDiv.innerHTML = '';
+
+            topicData.topics.forEach((topic, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => showDemo(grade, index);
+                card.innerHTML = `
+                    <h3>${topic.title}</h3>
+                    <p>${topic.description.substring(0, 70)}...</p>
+                `;
+                topicListDiv.appendChild(card);
+            });
+
+            showScreen('topic-selection');
+        }
+
+        function showDemo(grade, topicIndex) {
+            const topic = curriculumData[grade].topics[topicIndex];
+
+            document.getElementById('demo-title').innerText = topic.title;
+            document.getElementById('demo-description').innerText = topic.description;
+            document.getElementById('demo-goal').innerText = topic.goal;
+            document.getElementById('demo-embed').innerHTML = topic.embedCode;
+
+            document.getElementById('back-to-topics').onclick = () => showTopics(grade);
+
+            showScreen('demo-screen');
+        }
+
+        // Initialize the first screen
+        window.onload = () => {
+            createGradeCards();
+        };
+    </script>
+</body>
+
+</html>
